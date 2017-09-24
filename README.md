@@ -9,3 +9,6 @@ wxpy: https://github.com/youfou/wxpy
 wBot: https://github.com/yaoyuan4102/wBot
 
 百度云服务： https://console.bce.baidu.com/
+
+
+需要ffmpeg支持，测试环境Python 2.7
