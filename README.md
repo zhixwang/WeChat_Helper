@@ -3,6 +3,9 @@
 语音识别基于Baidu Speech.
 
 参考资料：
+
 wxpy: https://github.com/youfou/wxpy
+
 wBot: https://github.com/yaoyuan4102/wBot
+
 百度云服务： https://console.bce.baidu.com/
