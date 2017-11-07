@@ -7,7 +7,7 @@ import os
 #import random
 import re
 import time
-import codecs
+#import codecs
 
 class WBot(object):
     def __init__(self):
@@ -143,7 +143,7 @@ class WBot(object):
             output_path = output_folder+u'\\'+ day +u'.txt'
             # bot.file_helper.send(u'文件输出地址：'+self.output_path)
             try:
-                output_file_object = codecs.open(output_path,'a','utf-8')
+                output_file_object = open(output_path,'a')
             except:
                 self.bot.file_helper.send(u'输出文件打开失败')
             else:
@@ -169,19 +169,12 @@ class WBot(object):
                             pass
                         #self.bot.file_helper.send(type(text))
                         try:
-                            output_file_object.write(text)
+                            output_file_object.write(text.encode('gb18030','ignore'))
                             output_file_object.write('\n')
                         except:
                             self.bot.file_helper.send(u'文件写入失败')
                         finally:
                             output_file_object.close()
-                        try:
-                            file1 = open(output_path,'a')
-                            file1.write('\n')
-                        except:
-                            self.bot.file_helper.send(u'换行符输入失败')
-                        finally:
-                            file1.close()
                         if config.COPY_TO_FILE_HELPER == True:
                             self.bot.file_helper.send(text)
 
@@ -243,8 +236,8 @@ class WBot(object):
                 absolute_path = absolute_path + u'/' + folder
                 if not os.path.exists(absolute_path):
                     os.makedirs(absolute_path)
-                    f=codecs.open(absolute_path+u'/name.txt','a','utf-8')
-                    f.write(msg.sender.name)
+                    f=open(absolute_path+u'/name.txt','a')
+                    f.write(msg.sender.name.encode('gb18030','ignore'))
                     f.close()
             absolute_path = absolute_path + u'/' + msg.file_name
         return absolute_path
