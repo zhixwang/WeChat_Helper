@@ -33,7 +33,8 @@ class WBot(object):
         self.bot.file_helper.send(u'机器人建立:')
         # self.output.send(u'机器人建立:')
         # self.input.send(u'讲座开始：')
-        self.auto_weidian()
+        # self.auto_weidian()
+        self.auto_daka()
         self.voice_message_helper()
         embed()
 
@@ -57,20 +58,7 @@ class WBot(object):
                 ret = ret.replace(u'图灵机器人', self.bot.self.nick_name)
                 msg.reply(ret)
 
-    def auto_accept_friends(self):
-        """
-        自动接收好友申请
-        备注信息需包含 微信昵称 和 '我爱你'
-        
-        Message Type: FRIENDS
-        :return: 
-        """
-        @self.bot.register(msg_types=FRIENDS)
-        def auto_accept(msg):
-            if self.bot.self.nick_name in msg.text and u'我爱你' in msg.text:
-                new_friend = self.bot.accept_friend(msg.card)
-                welcome_msg = new_friend.nick_name + u', 我也爱你！么么哒！'
-                new_friend.send(welcome_msg)
+
 
     def recalled_message_helper(self):
         """
@@ -97,7 +85,7 @@ class WBot(object):
                     msg.reply(text_msg)
 
     '''
-    def auto_weidian(self):
+    def auto_weidian(self):     
         @self.bot.register(msg_types=TEXT,except_self=False)
         def auto_reply_weidian(msg):
             sender_name = msg.sender.name
@@ -116,6 +104,41 @@ class WBot(object):
                 msg.reply(weidian_address)
             elif msg.text.find(u'小帅舅舅') >= 0:
                 msg.reply(u'在！')
+            else:
+                return
+
+    def auto_daka(self):    # 自动整理打卡
+        @self.bot.register(msg_types=TEXT,except_self=False)
+        def auto_reply_weidian(msg):
+            sender_name = msg.sender.name
+            whtx = u'坚持阅读拒绝碎片'
+            if isinstance(msg.chat, Group): # 判断是不是群聊
+                pass
+            else:
+                return
+            if sender_name.find(whtx) < 0:  # 判断群聊名称
+                return
+            else:
+                pass
+                #self.bot.file_helper.send('Someone talking about '+ whtx)
+            if msg.text.find(u'读书打卡'):
+                notes = msg.text
+                u_name = msg.member.name
+                try:
+                    output_file_object = open('notes.txt','a')
+                except:
+                    self.bot.file_helper.send(u'输出文件打开失败')
+                else:
+                    pass
+                try:
+                    output_file_object.write(u_name.encode('gb18030','ignore'))
+                    output_file_object.write('\t')
+                    output_file_object.write(notes.encode('gb18030','ignore'))
+                    output_file_object.write('\n')
+                except:
+                    self.bot.file_helper.send(u'文件写入失败')
+                finally:
+                    output_file_object.close()
             else:
                 return
 
