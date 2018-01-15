@@ -120,8 +120,9 @@ class WBot(object):
                 return
             else:
                 pass
-                #self.bot.file_helper.send('Someone talking about '+ whtx)
-            if msg.text.find(u'读书打卡'):
+            if msg.text.find(u'读书打卡') < 0:
+                return
+            else:
                 notes = msg.text
                 u_name = msg.member.name
                 try:
@@ -139,8 +140,7 @@ class WBot(object):
                     self.bot.file_helper.send(u'文件写入失败')
                 finally:
                     output_file_object.close()
-            else:
-                return
+
 
 
     ### Multimedia Message Process ###
