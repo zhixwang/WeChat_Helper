@@ -29,12 +29,12 @@ class WBot(object):
     def run(self):
         #self.auto_reply_tuling_robot()
         #self.auto_accept_friends()
-        #self.recalled_message_helper()
         self.bot.file_helper.send(u'机器人建立:')
+        self.recalled_message_helper()
         # self.output.send(u'机器人建立:')
         # self.input.send(u'讲座开始：')
         # self.auto_weidian()
-        self.auto_daka()
+        # self.auto_daka()
         self.voice_message_helper()
         embed()
 
@@ -59,15 +59,15 @@ class WBot(object):
                 msg.reply(ret)
 
 
-
+''' 
     def recalled_message_helper(self):
         """
         对撤回的消息进行处理
-        
+       
         Message Type: NOTE
         :return: 
         """
-        @self.bot.register(chats=self.wxl,msg_types=NOTE)
+        @self.bot.register(msg_types=NOTE)
         def auto_display(msg):
             msg_content = msg.raw.get('Content')
             if re.search(u'<!\[CDATA\[.*撤回了一条消息\]\]>', msg_content) is not None:
@@ -82,14 +82,14 @@ class WBot(object):
                                    u' 撤回了一条消息：' + self._message_truncation(recalled_msg.text)
                     else:
                         text_msg = recalled_msg.sender.nick_name + u' 撤回了一条消息'
-                    msg.reply(text_msg)
+                    self.bot.file_helper.send(text_msg)
 
-    '''
+    
     def auto_weidian(self):     
         @self.bot.register(msg_types=TEXT,except_self=False)
-        def auto_reply_weidian(msg):
+        def auto_reply_huifu(msg):
             sender_name = msg.sender.name
-            whtx = u'文话童心'
+            whtx = u'Keyword'
             if isinstance(msg.chat, Group):
                 pass
             else:
@@ -99,19 +99,17 @@ class WBot(object):
             else:
                 pass
                 #self.bot.file_helper.send('Someone talking about '+ whtx)
-            if msg.text == u'微店':
-                weidian_address=u'https://weidian.com/s/161180129?src=shop&wfr=wx&from=groupmessage'
-                msg.reply(weidian_address)
-            elif msg.text.find(u'小帅舅舅') >= 0:
-                msg.reply(u'在！')
+            if msg.text.find(u'Keyword') >= 0:
+                msg.reply_image('keyword.jpg')
             else:
                 return
+
 
     def auto_daka(self):    # 自动整理打卡
         @self.bot.register(msg_types=TEXT,except_self=False)
         def auto_reply_weidian(msg):
             sender_name = msg.sender.name
-            whtx = u'坚持阅读拒绝碎片'
+            whtx = u'微信群名'
             if isinstance(msg.chat, Group): # 判断是不是群聊
                 pass
             else:
@@ -194,6 +192,18 @@ class WBot(object):
                         try:
                             output_file_object.write(text.encode('gb18030','ignore'))
                             output_file_object.write('\n')
+                            self.bot.file_helper.send(text)
+                            #如果是米帮，就回复文字内容
+                            sender_name = msg.sender.name
+                            whtx = u'赛晖'
+                            if isinstance(msg.chat, Group):
+                                pass
+                            else:
+                                return
+                            if sender_name.find(whtx) < 0:
+                                return
+                            else:
+                                msg.reply(text)
                         except:
                             self.bot.file_helper.send(u'文件写入失败')
                         finally:
