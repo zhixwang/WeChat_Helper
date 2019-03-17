@@ -28,7 +28,12 @@ class WBot(object):
                 config.BAIDU_VOICE[u'api_key'],
                 config.BAIDU_VOICE[u'secret_key']
             )
-        self.listening_grp = self.bot.groups().search(config.INPUT_GROUP_NAME)[0]
+        if len(config.INPUT_GROUP_NAME) > 1:
+            self.listening_grp = []
+            for name in config.INPUT_GROUP_NAME:
+                self.listening_grp.append(self.bot.groups().search(name)[0])
+        else:
+            self.listening_grp = self.bot.groups().search(config.INPUT_GROUP_NAME)[0]
 
         # self.session = requests.Session()
         # self.tulingUrl = config.TULING_URL
@@ -144,11 +149,13 @@ class WBot(object):
             #self.bot.file_helper.send('From'+ grp_name)
             #self.bot.file_helper.send('To'+ config.OUTPUT_GROUP_NAME)
             if config.FORWARD_TO_GROUP == True:
-                receiver = self.bot.groups().search(config.OUTPUT_GROUP_NAME)[0]
+                for out_name in config.OUTPUT_GROUP_NAME:
+                    receiver = self.bot.groups().search(out_name)[0]
+                    msg.forward(receiver)
             else:
                 receiver = self.bot.friends().search(config.OUTPUT_CHAT_NAME)[0]
+                msg.forward(receiver)
             #self.bot.file_helper.send('Group found')
-            msg.forward(receiver)
             #receiver.send(msg.text)
             return
 
